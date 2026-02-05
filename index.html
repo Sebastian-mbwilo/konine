@@ -1,15 +1,48 @@
-<!DOCTYPE html>
+<!DOCTYPE html><!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KONINE | Fashion Portfolio</title>
     
+    <!-- 
+    ═══════════════════════════════════════════════════════════════════════
+    🔐 GOOGLE OAUTH SETUP INSTRUCTIONS
+    ═══════════════════════════════════════════════════════════════════════
+    
+    HATUA 1: Pata Google Client ID
+    -------------------------------
+    1. Nenda: https://console.cloud.google.com/
+    2. Create project mpya: "KONINE Portfolio"
+    3. Enable "Google Identity Services API"
+    4. Create OAuth 2.0 Client ID:
+       - Type: Web application
+       - Authorized JavaScript origins:
+         * http://localhost:8000
+         * https://yourusername.github.io (kwa GitHub Pages)
+       - Authorized redirect URIs:
+         * http://localhost:8000/
+         * https://yourusername.github.io/your-repo/
+    5. COPY Client ID yako
+    
+    HATUA 2: Weka Client ID Hapa Chini
+    -----------------------------------
+    Tafuta line 64 na badilisha "YOUR_GOOGLE_CLIENT_ID_HERE" 
+    na Client ID yako halisi.
+    
+    HATUA 3: Badilisha Admin Email
+    -------------------------------
+    Tafuta line 827 na weka email yako ya Google ambayo 
+    utatumia kwa admin access.
+    
+    ═══════════════════════════════════════════════════════════════════════
+    -->
+    
+    <!-- Google Sign-In Library -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
-    
-    <!-- Google Sign-In -->
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
     
     <style>
         :root {
@@ -52,7 +85,6 @@
             border-bottom: 1px solid rgba(202, 163, 106, 0.2);
         }
 
-        /* Logo */
         .logo-art {
             display: flex;
             align-items: flex-end;
@@ -118,7 +150,6 @@
             text-shadow: 0 0 15px rgba(202, 163, 106, 0.6);
         }
 
-        /* Navigation Links */
         .nav-links {
             display: flex;
             list-style: none;
@@ -158,7 +189,6 @@
             color: var(--gold);
         }
 
-        /* ===== PAGE SECTIONS ===== */
         .page {
             display: none;
             padding: 140px 10% 80px;
@@ -175,7 +205,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ===== HOME PAGE WITH WATER EFFECT ===== */
+        /* ===== HOME PAGE ===== */
         .hero-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -185,7 +215,6 @@
             margin: 0 auto;
         }
 
-        /* Water Effect Container */
         .water-container {
             position: relative;
             width: 100%;
@@ -206,7 +235,6 @@
             border-radius: 40% 60% 60% 40% / 60% 30% 70% 40%;
             animation: waterMorph 25s infinite ease-in-out;
             z-index: 1;
-            overflow: hidden;
         }
 
         .water-ripples {
@@ -217,8 +245,7 @@
             left: -50%;
             background: 
                 radial-gradient(circle at 30% 30%, rgba(202, 163, 106, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 70% 70%, rgba(202, 163, 106, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, rgba(202, 163, 106, 0.05) 0%, transparent 50%);
+                radial-gradient(circle at 70% 70%, rgba(202, 163, 106, 0.08) 0%, transparent 50%);
             animation: ripples 20s infinite linear;
             z-index: 2;
         }
@@ -234,11 +261,9 @@
             background-image: url('profile.jpg');
             background-size: cover;
             background-position: center;
-            object-fit: cover;
             border-radius: 40% 60% 60% 40% / 60% 30% 70% 40%;
             animation: imageDistort 25s infinite ease-in-out;
             filter: grayscale(0.1) contrast(1.1) brightness(1.05);
-            transition: filter 0.5s ease;
             z-index: 3;
         }
 
@@ -372,10 +397,6 @@
         .water-container:hover .water-image {
             animation-duration: 15s;
             filter: grayscale(0) contrast(1.2) brightness(1.1);
-        }
-
-        .water-container:hover .water-ripples {
-            animation-duration: 10s;
         }
 
         .hero-text h3 {
@@ -537,7 +558,6 @@
         .gallery-header {
             text-align: center;
             margin-bottom: 60px;
-            position: relative;
         }
 
         .gallery-header h2 {
@@ -547,7 +567,6 @@
             background: linear-gradient(135deg, var(--gold), var(--light-gold));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: 2px;
         }
 
         .gallery-header p {
@@ -555,7 +574,6 @@
             font-size: 1.1rem;
             max-width: 700px;
             margin: 0 auto 30px;
-            line-height: 1.8;
         }
 
         .admin-button {
@@ -683,7 +701,7 @@
             transform: translateX(5px);
         }
 
-        /* ===== ADMIN MODAL ===== */
+        /* ===== MODAL ===== */
         .modal {
             display: none;
             position: fixed;
@@ -693,7 +711,6 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.95);
             z-index: 2000;
-            animation: fadeIn 0.3s ease;
         }
 
         .modal.active {
@@ -815,7 +832,6 @@
             color: var(--text-light);
             margin-bottom: 8px;
             font-weight: 500;
-            letter-spacing: 0.5px;
         }
 
         .form-group input,
@@ -827,14 +843,12 @@
             color: var(--text-light);
             font-family: 'Montserrat', sans-serif;
             font-size: 1rem;
-            transition: all 0.3s ease;
         }
 
         .form-group input:focus,
         .form-group textarea:focus {
             outline: none;
             border-color: var(--gold);
-            box-shadow: 0 0 0 3px rgba(202, 163, 106, 0.1);
         }
 
         .file-input-wrapper {
@@ -1038,7 +1052,6 @@
             box-shadow: 0 5px 15px rgba(202, 163, 106, 0.3);
         }
 
-        /* ===== FOOTER ===== */
         footer {
             text-align: center;
             padding: 40px 20px;
@@ -1058,7 +1071,6 @@
             margin-bottom: 20px;
         }
 
-        /* ===== RESPONSIVE ===== */
         @media (max-width: 992px) {
             .hero-container,
             .contact-content {
@@ -1066,16 +1078,6 @@
                 text-align: center;
             }
             
-            .water-container {
-                max-width: 380px;
-                height: 480px;
-                margin: 0 auto;
-            }
-            
-            .hero-text h1 {
-                font-size: 3rem;
-            }
-
             .gallery-grid {
                 grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             }
@@ -1155,7 +1157,6 @@
 </head>
 <body>
 
-    <!-- Navigation -->
     <nav>
         <div class="logo-art">
             <div class="letter k">K</div>
@@ -1174,7 +1175,6 @@
         </ul>
     </nav>
 
-    <!-- Home Page -->
     <div id="home" class="page active">
         <div class="hero-container">
             <div class="hero-img">
@@ -1210,7 +1210,6 @@
         </div>
     </div>
 
-    <!-- Skills Page -->
     <div id="skills" class="page">
         <div class="skills-header">
             <h2>Artisan Craft</h2>
@@ -1244,7 +1243,6 @@
         </div>
     </div>
 
-    <!-- Gallery Page -->
     <div id="gallery" class="page">
         <div class="gallery-header">
             <h2>Portfolio Gallery</h2>
@@ -1253,7 +1251,6 @@
         </div>
         
         <div class="gallery-grid" id="galleryGrid">
-            <!-- Default project: Rock Paper Scissors Game -->
             <div class="gallery-item">
                 <img src="https://via.placeholder.com/400x350/1a1a1a/caa36a?text=Rock+Paper+Scissors+Game" alt="Rock Paper Scissors Game" class="gallery-image">
                 <div class="gallery-info">
@@ -1267,10 +1264,8 @@
                     </div>
                 </div>
             </div>
-            <!-- Additional gallery items will be loaded from localStorage -->
         </div>
 
-        <!-- Admin Dashboard (Hidden by default) -->
         <div class="admin-dashboard" id="adminDashboard">
             <div class="admin-header">
                 <div class="admin-user">
@@ -1322,13 +1317,10 @@
             </div>
 
             <h4 style="font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--gold); margin-bottom: 30px;">Manage Gallery</h4>
-            <div class="admin-gallery-grid" id="adminGalleryGrid">
-                <!-- Admin gallery items with delete buttons -->
-            </div>
+            <div class="admin-gallery-grid" id="adminGalleryGrid"></div>
         </div>
     </div>
 
-    <!-- Contact Page -->
     <div id="contact" class="page">
         <div class="contact-header">
             <h2>Connect With Me</h2>
@@ -1342,9 +1334,7 @@
                 <p>📧 <strong>Email:</strong> <a href="mailto:mbwilosebastian@gmail.com">mbwilosebastian@gmail.com</a></p>
                 <p>📞 <strong>Phone:</strong> <a href="tel:+255617880633">+255 617 880 633</a></p>
                 <p>📱 <strong>Alt Phone:</strong> <a href="tel:+255628240630">+255 628 240 630</a></p>
-                <p><strong>Instagram:</strong>
-                <a href="https://instagram.com/king_.kash.99" target="_blank">@king_.kash.99</a>
-                </p>
+                <p><strong>Instagram:</strong> <a href="https://instagram.com/king_.kash.99" target="_blank">@king_.kash.99</a></p>
                 
                 <div class="quote">
                     "In 2023, as a young scholar, I dreamed KONINE into existence—proof that vision knows no age, only courage."
@@ -1362,28 +1352,47 @@
         </div>
     </div>
 
-    <!-- Admin Login Modal -->
     <div class="modal" id="adminModal">
         <div class="modal-content">
             <span class="modal-close" onclick="closeAdminModal()">×</span>
             <h3>Admin Access</h3>
             <p style="text-align: center; color: var(--text-gray); margin-bottom: 30px;">
-                Sign in with your authorized Google account to manage the gallery
+                Sign in with your authorized Google account
             </p>
+            
+            <!-- 
+            ═══════════════════════════════════════════════════════════════════════
+            🔐 GOOGLE SIGN-IN BUTTON - WEKA CLIENT ID YAKO HAPA!
+            ═══════════════════════════════════════════════════════════════════════
+            
+            BADILISHA "YOUR_GOOGLE_CLIENT_ID_HERE" NA CLIENT ID YAKO HALISI
+            
+            Example:
+            data-client_id="123456789-abcdefghijk.apps.googleusercontent.com"
+            ═══════════════════════════════════════════════════════════════════════
+            -->
             <div class="google-signin">
                 <div id="g_id_onload"
-                     data-client_id="YOUR_GOOGLE_CLIENT_ID"
-                     data-callback="handleCredentialResponse">
+                     data-client_id="YOUR_GOOGLE_CLIENT_ID_HERE"
+                     data-callback="handleCredentialResponse"
+                     data-auto_prompt="false">
                 </div>
-                <div class="g_id_signin" data-type="standard"></div>
+                <div class="g_id_signin" 
+                     data-type="standard"
+                     data-size="large"
+                     data-theme="filled_black"
+                     data-text="signin_with"
+                     data-shape="rectangular"
+                     data-logo_alignment="left">
+                </div>
             </div>
+            
             <p style="text-align: center; color: var(--text-gray); font-size: 0.85rem; margin-top: 20px;">
-                ⚠️ Only authorized admin email can access this panel
+                ⚠️ Only authorized admin email can access
             </p>
         </div>
     </div>
 
-    <!-- Footer -->
     <footer>
         <p id="copyright-text"></p>
         <p>KONINE GLOBAL | Founded 2023 by Sebastian Mbwilo</p>
@@ -1391,8 +1400,13 @@
     </footer>
 
     <script>
-        // ===== CONFIGURATION =====
-        const ADMIN_EMAIL = 'mbwilosebastian@gmail.com'; // Your authorized admin email
+        // ═══════════════════════════════════════════════════════════════════════
+        // 📧 ADMIN EMAIL - BADILISHA EMAIL YAKO HAPA!
+        // ═══════════════════════════════════════════════════════════════════════
+        // Hii ndio email ya Google ambayo itakubaliwa kuingia admin panel
+        const ADMIN_EMAIL = 'mbwilosebastian@gmail.com'; // <-- BADILISHA HAPA!
+        // ═══════════════════════════════════════════════════════════════════════
+
         const GALLERY_STORAGE_KEY = 'konine_gallery_items';
 
         // ===== WATER EFFECTS =====
@@ -1441,13 +1455,9 @@
 
         // ===== PAGE NAVIGATION =====
         function showPage(pageId) {
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.remove('active');
-            });
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
-            document.querySelectorAll('.nav-links a').forEach(link => {
-                link.classList.remove('active');
-            });
+            document.querySelectorAll('.nav-links a').forEach(link => link.classList.remove('active'));
             document.getElementById(`link-${pageId}`).classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -1462,10 +1472,8 @@
         const now = new Date();
         const monthNames = ["January", "February", "March", "April", "May", "June", 
                           "July", "August", "September", "October", "November", "December"];
-        const currentMonth = monthNames[now.getMonth()];
-        const currentYear = now.getFullYear();
         document.getElementById('copyright-text').textContent = 
-            `© ${currentMonth} ${currentYear} KONINE — Vision Born 2023`;
+            `© ${monthNames[now.getMonth()]} ${now.getFullYear()} KONINE — Vision Born 2023`;
 
         // ===== TYPEWRITER EFFECT =====
         const typeText = document.getElementById('type-text');
@@ -1473,7 +1481,6 @@
         let professionIndex = 0;
         let charIndex = 0;
         let isDeleting = false;
-        let typingSpeed = 100;
 
         function typeWriter() {
             const currentProfession = professions[professionIndex];
@@ -1481,23 +1488,22 @@
             if (isDeleting) {
                 typeText.textContent = currentProfession.substring(0, charIndex - 1);
                 charIndex--;
-                typingSpeed = 50;
             } else {
                 typeText.textContent = currentProfession.substring(0, charIndex + 1);
                 charIndex++;
-                typingSpeed = 100;
             }
 
+            let speed = isDeleting ? 50 : 100;
             if (!isDeleting && charIndex === currentProfession.length) {
                 isDeleting = true;
-                typingSpeed = 1500;
+                speed = 1500;
             } else if (isDeleting && charIndex === 0) {
                 isDeleting = false;
                 professionIndex = (professionIndex + 1) % professions.length;
-                typingSpeed = 500;
+                speed = 500;
             }
 
-            setTimeout(typeWriter, typingSpeed);
+            setTimeout(typeWriter, speed);
         }
 
         setTimeout(typeWriter, 1000);
@@ -1506,8 +1512,7 @@
         document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const formData = new FormData(this);
-            const name = formData.get('name');
-            alert(`Thank you ${name}! Your message has been received. I'll respond shortly.`);
+            alert(`Thank you ${formData.get('name')}! Your message has been received.`);
             this.reset();
         });
 
@@ -1520,25 +1525,36 @@
             document.getElementById('adminModal').classList.remove('active');
         }
 
-        // ===== GOOGLE SIGN-IN =====
+        // ═══════════════════════════════════════════════════════════════════════
+        // 🔐 GOOGLE SIGN-IN HANDLER
+        // ═══════════════════════════════════════════════════════════════════════
         function handleCredentialResponse(response) {
-            // Decode JWT token
-            const payload = JSON.parse(atob(response.credential.split('.')[1]));
-            
-            // Check if user is authorized
-            if (payload.email === ADMIN_EMAIL) {
-                // Store user info
-                sessionStorage.setItem('admin_logged_in', 'true');
-                sessionStorage.setItem('admin_name', payload.name);
-                sessionStorage.setItem('admin_email', payload.email);
-                sessionStorage.setItem('admin_photo', payload.picture);
+            try {
+                // Decode JWT token from Google
+                const payload = JSON.parse(atob(response.credential.split('.')[1]));
                 
-                // Show admin dashboard
-                showAdminDashboard();
-                closeAdminModal();
-                alert('Welcome, Admin! You are now logged in.');
-            } else {
-                alert('Access Denied: You are not authorized to access the admin panel.');
+                console.log('User attempting login:', payload.email);
+                
+                // Check if user is authorized admin
+                if (payload.email === ADMIN_EMAIL) {
+                    // Store user info in session
+                    sessionStorage.setItem('admin_logged_in', 'true');
+                    sessionStorage.setItem('admin_name', payload.name);
+                    sessionStorage.setItem('admin_email', payload.email);
+                    sessionStorage.setItem('admin_photo', payload.picture);
+                    
+                    // Show admin dashboard
+                    showAdminDashboard();
+                    closeAdminModal();
+                    
+                    alert(`✅ Welcome back, ${payload.name}! You are now logged in as admin.`);
+                } else {
+                    alert(`❌ Access Denied!\n\nYour email (${payload.email}) is not authorized.\n\nOnly ${ADMIN_EMAIL} can access the admin panel.`);
+                    console.log('Unauthorized access attempt from:', payload.email);
+                }
+            } catch (error) {
+                console.error('Error processing Google Sign-In:', error);
+                alert('Error signing in. Please try again.');
             }
         }
 
@@ -1556,9 +1572,11 @@
         }
 
         function logoutAdmin() {
-            sessionStorage.clear();
-            document.getElementById('adminDashboard').classList.remove('active');
-            alert('You have been logged out.');
+            if (confirm('Are you sure you want to logout?')) {
+                sessionStorage.clear();
+                document.getElementById('adminDashboard').classList.remove('active');
+                alert('You have been logged out successfully.');
+            }
         }
 
         // ===== GALLERY MANAGEMENT =====
@@ -1575,35 +1593,26 @@
             const galleryGrid = document.getElementById('galleryGrid');
             const items = getGalleryItems();
             
-            // Clear existing items (except the default RPS game)
             const defaultItem = galleryGrid.querySelector('.gallery-item');
             galleryGrid.innerHTML = '';
-            if (defaultItem) {
-                galleryGrid.appendChild(defaultItem);
-            }
+            if (defaultItem) galleryGrid.appendChild(defaultItem);
             
-            // Add items from storage
             items.forEach((item, index) => {
-                const itemElement = createGalleryItem(item, index);
-                galleryGrid.appendChild(itemElement);
-            });
-        }
-
-        function createGalleryItem(item, index) {
-            const div = document.createElement('div');
-            div.className = 'gallery-item';
-            div.innerHTML = `
-                <img src="${item.image}" alt="${item.title}" class="gallery-image">
-                <div class="gallery-info">
-                    <h3>${item.title}</h3>
-                    <p>${item.description}</p>
-                    <div class="gallery-meta">
-                        <span class="gallery-year">${item.year}</span>
-                        ${item.url ? `<a href="${item.url}" target="_blank" class="gallery-link">View Project →</a>` : ''}
+                const div = document.createElement('div');
+                div.className = 'gallery-item';
+                div.innerHTML = `
+                    <img src="${item.image}" alt="${item.title}" class="gallery-image">
+                    <div class="gallery-info">
+                        <h3>${item.title}</h3>
+                        <p>${item.description}</p>
+                        <div class="gallery-meta">
+                            <span class="gallery-year">${item.year}</span>
+                            ${item.url ? `<a href="${item.url}" target="_blank" class="gallery-link">View Project →</a>` : ''}
+                        </div>
                     </div>
-                </div>
-            `;
-            return div;
+                `;
+                galleryGrid.appendChild(div);
+            });
         }
 
         function loadAdminGallery() {
@@ -1631,13 +1640,13 @@
         }
 
         function deleteGalleryItem(index) {
-            if (confirm('Are you sure you want to delete this project?')) {
+            if (confirm('Are you sure you want to delete this project? This cannot be undone.')) {
                 const items = getGalleryItems();
                 items.splice(index, 1);
                 saveGalleryItems(items);
                 loadAdminGallery();
                 loadGallery();
-                alert('Project deleted successfully!');
+                alert('✅ Project deleted successfully!');
             }
         }
 
@@ -1661,7 +1670,6 @@
             const formData = new FormData(this);
             const imageFile = formData.get('image');
             
-            // Read image as base64
             const reader = new FileReader();
             reader.onload = function(e) {
                 const newItem = {
@@ -1672,20 +1680,17 @@
                     image: e.target.result
                 };
                 
-                // Save to localStorage
                 const items = getGalleryItems();
                 items.push(newItem);
                 saveGalleryItems(items);
                 
-                // Reload galleries
                 loadGallery();
                 loadAdminGallery();
                 
-                // Reset form
                 document.getElementById('uploadForm').reset();
                 document.getElementById('imagePreview').style.display = 'none';
                 
-                alert('Project uploaded successfully!');
+                alert('✅ Project uploaded successfully!');
             };
             reader.readAsDataURL(imageFile);
         });
@@ -1695,7 +1700,7 @@
             createWaterEffects();
             loadGallery();
             
-            // Check if admin is logged in
+            // Check if admin is already logged in
             if (sessionStorage.getItem('admin_logged_in') === 'true') {
                 showAdminDashboard();
             }
@@ -1706,4 +1711,4 @@
         });
     </script>
 </body>
-</html>
+    </html>
