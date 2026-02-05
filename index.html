@@ -8,6 +8,9 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     
+    <!-- Google Sign-In -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    
     <style>
         :root {
             --gold: #caa36a;
@@ -131,6 +134,7 @@
             text-transform: uppercase;
             position: relative;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
 
         .nav-links a::after {
@@ -191,7 +195,6 @@
             filter: drop-shadow(0 0 30px rgba(202, 163, 106, 0.3));
         }
 
-        /* Water wave base - completely fluid, no corners */
         .water-wave {
             position: absolute;
             width: 100%;
@@ -206,7 +209,6 @@
             overflow: hidden;
         }
 
-        /* Water surface ripples */
         .water-ripples {
             position: absolute;
             width: 200%;
@@ -221,7 +223,6 @@
             z-index: 2;
         }
 
-        /* The actual profile image with water distortion */
         .water-image {
             position: absolute;
             top: 15px;
@@ -236,15 +237,11 @@
             object-fit: cover;
             border-radius: 40% 60% 60% 40% / 60% 30% 70% 40%;
             animation: imageDistort 25s infinite ease-in-out;
-            filter: 
-                grayscale(0.1) 
-                contrast(1.1) 
-                brightness(1.05);
+            filter: grayscale(0.1) contrast(1.1) brightness(1.05);
             transition: filter 0.5s ease;
             z-index: 3;
         }
 
-        /* Water droplets effect */
         .water-droplets {
             position: absolute;
             width: 100%;
@@ -264,28 +261,19 @@
             filter: blur(1px);
         }
 
-        /* Shimmering light reflection */
         .water-shimmer {
             position: absolute;
             width: 150%;
             height: 100px;
             top: -50px;
             left: -25%;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(255, 255, 255, 0.1),
-                rgba(202, 163, 106, 0.2),
-                rgba(255, 255, 255, 0.1),
-                transparent
-            );
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), rgba(202, 163, 106, 0.2), rgba(255, 255, 255, 0.1), transparent);
             transform: rotate(-15deg);
             animation: shimmer 12s infinite linear;
             z-index: 3;
             mix-blend-mode: overlay;
         }
 
-        /* Floating bubbles */
         .water-bubbles {
             position: absolute;
             width: 100%;
@@ -301,7 +289,6 @@
             opacity: 0.4;
         }
 
-        /* ANIMATIONS FOR WATER EFFECT */
         @keyframes waterMorph {
             0%, 100% {
                 border-radius: 40% 60% 60% 40% / 60% 30% 70% 40%;
@@ -344,15 +331,9 @@
         }
 
         @keyframes ripples {
-            0% {
-                transform: rotate(0deg) scale(1);
-            }
-            50% {
-                transform: rotate(180deg) scale(1.1);
-            }
-            100% {
-                transform: rotate(360deg) scale(1);
-            }
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
         }
 
         @keyframes dropletFall {
@@ -360,12 +341,8 @@
                 transform: translateY(-100px) scale(0);
                 opacity: 0;
             }
-            10% {
-                opacity: 0.8;
-            }
-            90% {
-                opacity: 0.8;
-            }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
             100% {
                 transform: translateY(500px) scale(1.5);
                 opacity: 0;
@@ -373,12 +350,8 @@
         }
 
         @keyframes shimmer {
-            0% {
-                transform: rotate(-15deg) translateX(-100%);
-            }
-            100% {
-                transform: rotate(-15deg) translateX(100%);
-            }
+            0% { transform: rotate(-15deg) translateX(-100%); }
+            100% { transform: rotate(-15deg) translateX(100%); }
         }
 
         @keyframes bubbleFloat {
@@ -392,7 +365,6 @@
             }
         }
 
-        /* Hover effects - more dramatic water movement */
         .water-container:hover .water-wave {
             animation-duration: 15s;
         }
@@ -442,7 +414,6 @@
             max-width: 500px;
         }
 
-        /* Founder Badge */
         .founder-badge {
             display: inline-block;
             padding: 10px 20px;
@@ -461,7 +432,6 @@
             font-weight: 600;
         }
 
-        /* Visitor Counter */
         .visitor-counter {
             display: inline-flex;
             align-items: center;
@@ -557,11 +527,403 @@
             line-height: 1.6;
         }
 
-        /* Icon styling */
         .skill-icon {
             font-size: 3rem;
             color: var(--gold);
             margin-bottom: 20px;
+        }
+
+        /* ===== GALLERY PAGE ===== */
+        .gallery-header {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .gallery-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--gold), var(--light-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+        }
+
+        .gallery-header p {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            line-height: 1.8;
+        }
+
+        .admin-button {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, var(--gold), #d4a76a);
+            color: #000;
+            text-decoration: none;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 0.9rem;
+        }
+
+        .admin-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(202, 163, 106, 0.4);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            background: var(--light-bg);
+            border-radius: 4px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(202, 163, 106, 0.15);
+            position: relative;
+        }
+
+        .gallery-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--gold), var(--light-gold));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+            z-index: 2;
+        }
+
+        .gallery-item:hover::before {
+            transform: scaleX(1);
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px);
+            border-color: var(--gold);
+            box-shadow: 0 20px 40px rgba(202, 163, 106, 0.2);
+        }
+
+        .gallery-image {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            transition: all 0.4s ease;
+            background: linear-gradient(135deg, rgba(202, 163, 106, 0.1), rgba(26, 26, 26, 0.9));
+        }
+
+        .gallery-item:hover .gallery-image {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+        }
+
+        .gallery-info {
+            padding: 25px;
+        }
+
+        .gallery-info h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+
+        .gallery-info p {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .gallery-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(202, 163, 106, 0.2);
+        }
+
+        .gallery-year {
+            color: var(--gold);
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        .gallery-link {
+            color: var(--gold);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .gallery-link:hover {
+            color: var(--light-gold);
+            transform: translateX(5px);
+        }
+
+        /* ===== ADMIN MODAL ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--light-bg);
+            padding: 50px;
+            border-radius: 4px;
+            max-width: 600px;
+            width: 90%;
+            border: 2px solid var(--gold);
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2rem;
+            color: var(--text-gray);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--gold);
+            transform: rotate(90deg);
+        }
+
+        .modal h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--gold);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .google-signin {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        /* Admin Dashboard */
+        .admin-dashboard {
+            display: none;
+        }
+
+        .admin-dashboard.active {
+            display: block;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: var(--light-bg);
+            border-left: 4px solid var(--gold);
+        }
+
+        .admin-user {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .admin-user img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+        }
+
+        .logout-button {
+            padding: 10px 25px;
+            background: rgba(202, 163, 106, 0.2);
+            color: var(--gold);
+            border: 1px solid var(--gold);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        .logout-button:hover {
+            background: var(--gold);
+            color: #000;
+        }
+
+        .upload-form {
+            background: var(--light-bg);
+            padding: 40px;
+            border-radius: 4px;
+            border: 2px dashed var(--gold);
+            margin-bottom: 40px;
+        }
+
+        .upload-form h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--gold);
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--text-light);
+            margin-bottom: 8px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            background: var(--dark-bg);
+            border: 1px solid rgba(202, 163, 106, 0.3);
+            color: var(--text-light);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(202, 163, 106, 0.1);
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-input-label {
+            display: block;
+            padding: 15px;
+            background: var(--dark-bg);
+            border: 2px dashed var(--gold);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-gray);
+        }
+
+        .file-input-label:hover {
+            background: rgba(202, 163, 106, 0.1);
+            color: var(--gold);
+        }
+
+        .preview-image {
+            max-width: 100%;
+            margin-top: 15px;
+            border: 2px solid var(--gold);
+            border-radius: 4px;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--gold), #d4a76a);
+            color: #000;
+            border: none;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(202, 163, 106, 0.4);
+        }
+
+        .admin-gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .admin-gallery-item {
+            background: var(--light-bg);
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid rgba(202, 163, 106, 0.15);
+            position: relative;
+        }
+
+        .delete-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 0, 0, 0.8);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-weight: 600;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .delete-button:hover {
+            background: rgba(255, 0, 0, 1);
+            transform: scale(1.05);
         }
 
         /* ===== CONTACT PAGE ===== */
@@ -635,7 +997,6 @@
             color: var(--light-gold);
         }
 
-        /* Contact Form */
         .contact-form input,
         .contact-form textarea {
             width: 100%;
@@ -714,6 +1075,10 @@
             .hero-text h1 {
                 font-size: 3rem;
             }
+
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
         }
 
         @media (max-width: 768px) {
@@ -743,6 +1108,14 @@
                 max-width: 340px;
                 height: 440px;
             }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                padding: 30px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -765,15 +1138,17 @@
                 height: 400px;
             }
             
-            .water-image {
-                background-size: cover;
-                background-position: center center;
-                object-fit: cover;
-            }
-            
             .founder-badge {
                 font-size: 0.8rem;
                 padding: 8px 15px;
+            }
+
+            .gallery-header h2 {
+                font-size: 2.5rem;
+            }
+
+            .admin-gallery-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -794,6 +1169,7 @@
         <ul class="nav-links">
             <li><a onclick="showPage('home')" id="link-home" class="active">Home</a></li>
             <li><a onclick="showPage('skills')" id="link-skills">Craft</a></li>
+            <li><a onclick="showPage('gallery')" id="link-gallery">Gallery</a></li>
             <li><a onclick="showPage('contact')" id="link-contact">Contact</a></li>
         </ul>
     </nav>
@@ -803,22 +1179,11 @@
         <div class="hero-container">
             <div class="hero-img">
                 <div class="water-container" id="waterContainer">
-                    <!-- Water wave base -->
                     <div class="water-wave"></div>
-                    
-                    <!-- Water ripples -->
                     <div class="water-ripples"></div>
-                    
-                    <!-- Water bubbles -->
                     <div class="water-bubbles" id="waterBubbles"></div>
-                    
-                    <!-- Water droplets -->
                     <div class="water-droplets" id="waterDroplets"></div>
-                    
-                    <!-- The profile image -->
                     <div class="water-image"></div>
-                    
-                    <!-- Shimmering light -->
                     <div class="water-shimmer"></div>
                 </div>
             </div>
@@ -833,8 +1198,6 @@
                 </div>
                 
                 <p>East African visionary who conceptualized and founded <strong>KONINE</strong> in 2023 while still navigating academia. A testament to youthful innovation meeting timeless craftsmanship.</p>
-                
-                
                 
                 <div class="visitor-counter">
                     <span>👤</span>
@@ -881,6 +1244,90 @@
         </div>
     </div>
 
+    <!-- Gallery Page -->
+    <div id="gallery" class="page">
+        <div class="gallery-header">
+            <h2>Portfolio Gallery</h2>
+            <p>A curated collection of my creative journey — from concept to execution, each piece tells a story of innovation and craftsmanship.</p>
+            <button class="admin-button" onclick="openAdminModal()">🔐 Admin Access</button>
+        </div>
+        
+        <div class="gallery-grid" id="galleryGrid">
+            <!-- Default project: Rock Paper Scissors Game -->
+            <div class="gallery-item">
+                <img src="https://via.placeholder.com/400x350/1a1a1a/caa36a?text=Rock+Paper+Scissors+Game" alt="Rock Paper Scissors Game" class="gallery-image">
+                <div class="gallery-info">
+                    <h3>Rock Paper Scissors</h3>
+                    <p>An interactive web-based game showcasing fundamental JavaScript skills, DOM manipulation, and creative UI design. A perfect blend of logic and aesthetics.</p>
+                    <div class="gallery-meta">
+                        <span class="gallery-year">2024</span>
+                        <a href="https://sebastian-mbwilo.github.io/RPS-version-0.1/" target="_blank" class="gallery-link">
+                            View Project →
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- Additional gallery items will be loaded from localStorage -->
+        </div>
+
+        <!-- Admin Dashboard (Hidden by default) -->
+        <div class="admin-dashboard" id="adminDashboard">
+            <div class="admin-header">
+                <div class="admin-user">
+                    <img src="" alt="User" id="userPhoto">
+                    <div>
+                        <div style="color: var(--text-light); font-weight: 600;" id="userName"></div>
+                        <div style="color: var(--text-gray); font-size: 0.85rem;" id="userEmail"></div>
+                    </div>
+                </div>
+                <button class="logout-button" onclick="logoutAdmin()">Logout</button>
+            </div>
+
+            <div class="upload-form">
+                <h4>Upload New Project</h4>
+                <form id="uploadForm">
+                    <div class="form-group">
+                        <label>Project Title</label>
+                        <input type="text" name="title" required placeholder="e.g., E-commerce Website">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea name="description" rows="4" required placeholder="Brief description of your project..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Year</label>
+                        <input type="text" name="year" required placeholder="2024">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Project URL (optional)</label>
+                        <input type="url" name="url" placeholder="https://...">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Project Image</label>
+                        <div class="file-input-wrapper">
+                            <input type="file" name="image" id="imageInput" accept="image/*" required>
+                            <label for="imageInput" class="file-input-label">
+                                📁 Choose Image File
+                            </label>
+                        </div>
+                        <img id="imagePreview" class="preview-image" style="display: none;">
+                    </div>
+                    
+                    <button type="submit" class="submit-button">Upload Project</button>
+                </form>
+            </div>
+
+            <h4 style="font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--gold); margin-bottom: 30px;">Manage Gallery</h4>
+            <div class="admin-gallery-grid" id="adminGalleryGrid">
+                <!-- Admin gallery items with delete buttons -->
+            </div>
+        </div>
+    </div>
+
     <!-- Contact Page -->
     <div id="contact" class="page">
         <div class="contact-header">
@@ -895,11 +1342,9 @@
                 <p>📧 <strong>Email:</strong> <a href="mailto:mbwilosebastian@gmail.com">mbwilosebastian@gmail.com</a></p>
                 <p>📞 <strong>Phone:</strong> <a href="tel:+255617880633">+255 617 880 633</a></p>
                 <p>📱 <strong>Alt Phone:</strong> <a href="tel:+255628240630">+255 628 240 630</a></p>
-                <P><strong>Instagram:</strong> <a href="https://instagram.com/king_.kash.99" target="_blank">
-                    
-                    @king_.kash.99
-                   </a>
-                </P>
+                <p><strong>Instagram:</strong>
+                <a href="https://instagram.com/king_.kash.99" target="_blank">@king_.kash.99</a>
+                </p>
                 
                 <div class="quote">
                     "In 2023, as a young scholar, I dreamed KONINE into existence—proof that vision knows no age, only courage."
@@ -917,6 +1362,27 @@
         </div>
     </div>
 
+    <!-- Admin Login Modal -->
+    <div class="modal" id="adminModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeAdminModal()">×</span>
+            <h3>Admin Access</h3>
+            <p style="text-align: center; color: var(--text-gray); margin-bottom: 30px;">
+                Sign in with your authorized Google account to manage the gallery
+            </p>
+            <div class="google-signin">
+                <div id="g_id_onload"
+                     data-client_id="YOUR_GOOGLE_CLIENT_ID"
+                     data-callback="handleCredentialResponse">
+                </div>
+                <div class="g_id_signin" data-type="standard"></div>
+            </div>
+            <p style="text-align: center; color: var(--text-gray); font-size: 0.85rem; margin-top: 20px;">
+                ⚠️ Only authorized admin email can access this panel
+            </p>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer>
         <p id="copyright-text"></p>
@@ -925,95 +1391,69 @@
     </footer>
 
     <script>
-        // ===== CREATE WATER EFFECTS =====
+        // ===== CONFIGURATION =====
+        const ADMIN_EMAIL = 'mbwilosebastian@gmail.com'; // Your authorized admin email
+        const GALLERY_STORAGE_KEY = 'konine_gallery_items';
+
+        // ===== WATER EFFECTS =====
         function createWaterEffects() {
             const dropletsContainer = document.getElementById('waterDroplets');
             const bubblesContainer = document.getElementById('waterBubbles');
             
             if (!dropletsContainer || !bubblesContainer) return;
             
-            // Create droplets
             for (let i = 0; i < 15; i++) {
                 const droplet = document.createElement('div');
                 droplet.className = 'droplet';
-                
-                // Random position
                 const x = Math.random() * 100;
                 droplet.style.left = `${x}%`;
-                
-                // Random delay
                 droplet.style.animationDelay = `${Math.random() * 10}s`;
-                
-                // Random size
                 const size = Math.random() * 4 + 4;
                 droplet.style.width = `${size}px`;
                 droplet.style.height = `${size}px`;
-                
                 dropletsContainer.appendChild(droplet);
             }
             
-            // Create bubbles
             for (let i = 0; i < 10; i++) {
                 const bubble = document.createElement('div');
                 bubble.className = 'bubble';
-                
-                // Random position
                 const x = Math.random() * 100;
                 const y = Math.random() * 100;
                 bubble.style.left = `${x}%`;
                 bubble.style.top = `${y}%`;
-                
-                // Random size
                 const size = Math.random() * 30 + 10;
                 bubble.style.width = `${size}px`;
                 bubble.style.height = `${size}px`;
-                
-                // Random animation
                 bubble.style.animationDelay = `${Math.random() * 15}s`;
                 bubble.style.animationDuration = `${Math.random() * 10 + 10}s`;
-                
                 bubblesContainer.appendChild(bubble);
             }
         }
 
-        // ===== RANDOMIZE WATER MOVEMENT ON INTERACTION =====
-        document.getElementById('waterContainer').addEventListener('mouseenter', function() {
+        document.getElementById('waterContainer')?.addEventListener('mouseenter', function() {
             const waterWave = this.querySelector('.water-wave');
             const waterImage = this.querySelector('.water-image');
-            
-            // Randomize water movement speed
-            const randomDuration1 = Math.random() * 10 + 15; // 15-25 seconds
-            const randomDuration2 = Math.random() * 10 + 15; // 15-25 seconds
-            
+            const randomDuration1 = Math.random() * 10 + 15;
+            const randomDuration2 = Math.random() * 10 + 15;
             waterWave.style.animationDuration = `${randomDuration1}s`;
             waterImage.style.animationDuration = `${randomDuration2}s`;
         });
 
         // ===== PAGE NAVIGATION =====
         function showPage(pageId) {
-            // Hide all pages
             document.querySelectorAll('.page').forEach(page => {
                 page.classList.remove('active');
             });
-            
-            // Show selected page
             document.getElementById(pageId).classList.add('active');
-            
-            // Update active link
             document.querySelectorAll('.nav-links a').forEach(link => {
                 link.classList.remove('active');
             });
             document.getElementById(`link-${pageId}`).classList.add('active');
-            
-            // Scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         // ===== VISITOR COUNTER =====
-        let visitorCount = localStorage.getItem('konine_visitors');
-        if (!visitorCount) {
-            visitorCount = 0;
-        }
+        let visitorCount = localStorage.getItem('konine_visitors') || 0;
         visitorCount++;
         localStorage.setItem('konine_visitors', visitorCount);
         document.getElementById('visitor-count').textContent = visitorCount;
@@ -1024,7 +1464,6 @@
                           "July", "August", "September", "October", "November", "December"];
         const currentMonth = monthNames[now.getMonth()];
         const currentYear = now.getFullYear();
-        
         document.getElementById('copyright-text').textContent = 
             `© ${currentMonth} ${currentYear} KONINE — Vision Born 2023`;
 
@@ -1051,54 +1490,220 @@
 
             if (!isDeleting && charIndex === currentProfession.length) {
                 isDeleting = true;
-                typingSpeed = 1500; // Pause at end
+                typingSpeed = 1500;
             } else if (isDeleting && charIndex === 0) {
                 isDeleting = false;
                 professionIndex = (professionIndex + 1) % professions.length;
-                typingSpeed = 500; // Pause before next word
+                typingSpeed = 500;
             }
 
             setTimeout(typeWriter, typingSpeed);
         }
 
-        // Start typewriter effect
         setTimeout(typeWriter, 1000);
 
-        // ===== FORM SUBMISSION =====
+        // ===== CONTACT FORM =====
         document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            // Get form data
             const formData = new FormData(this);
             const name = formData.get('name');
-            
-            // Simple form submission feedback
             alert(`Thank you ${name}! Your message has been received. I'll respond shortly.`);
-            
-            // Reset form
             this.reset();
         });
 
-        // ===== SMOOTH SCROLL FOR NAV LINKS =====
-        document.querySelectorAll('nav a').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('onclick').match(/'([^']+)'/)[1];
-                showPage(targetId);
+        // ===== ADMIN MODAL =====
+        function openAdminModal() {
+            document.getElementById('adminModal').classList.add('active');
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminModal').classList.remove('active');
+        }
+
+        // ===== GOOGLE SIGN-IN =====
+        function handleCredentialResponse(response) {
+            // Decode JWT token
+            const payload = JSON.parse(atob(response.credential.split('.')[1]));
+            
+            // Check if user is authorized
+            if (payload.email === ADMIN_EMAIL) {
+                // Store user info
+                sessionStorage.setItem('admin_logged_in', 'true');
+                sessionStorage.setItem('admin_name', payload.name);
+                sessionStorage.setItem('admin_email', payload.email);
+                sessionStorage.setItem('admin_photo', payload.picture);
+                
+                // Show admin dashboard
+                showAdminDashboard();
+                closeAdminModal();
+                alert('Welcome, Admin! You are now logged in.');
+            } else {
+                alert('Access Denied: You are not authorized to access the admin panel.');
+            }
+        }
+
+        function showAdminDashboard() {
+            const adminDashboard = document.getElementById('adminDashboard');
+            adminDashboard.classList.add('active');
+            
+            // Update user info
+            document.getElementById('userName').textContent = sessionStorage.getItem('admin_name');
+            document.getElementById('userEmail').textContent = sessionStorage.getItem('admin_email');
+            document.getElementById('userPhoto').src = sessionStorage.getItem('admin_photo');
+            
+            // Load admin gallery
+            loadAdminGallery();
+        }
+
+        function logoutAdmin() {
+            sessionStorage.clear();
+            document.getElementById('adminDashboard').classList.remove('active');
+            alert('You have been logged out.');
+        }
+
+        // ===== GALLERY MANAGEMENT =====
+        function getGalleryItems() {
+            const items = localStorage.getItem(GALLERY_STORAGE_KEY);
+            return items ? JSON.parse(items) : [];
+        }
+
+        function saveGalleryItems(items) {
+            localStorage.setItem(GALLERY_STORAGE_KEY, JSON.stringify(items));
+        }
+
+        function loadGallery() {
+            const galleryGrid = document.getElementById('galleryGrid');
+            const items = getGalleryItems();
+            
+            // Clear existing items (except the default RPS game)
+            const defaultItem = galleryGrid.querySelector('.gallery-item');
+            galleryGrid.innerHTML = '';
+            if (defaultItem) {
+                galleryGrid.appendChild(defaultItem);
+            }
+            
+            // Add items from storage
+            items.forEach((item, index) => {
+                const itemElement = createGalleryItem(item, index);
+                galleryGrid.appendChild(itemElement);
             });
+        }
+
+        function createGalleryItem(item, index) {
+            const div = document.createElement('div');
+            div.className = 'gallery-item';
+            div.innerHTML = `
+                <img src="${item.image}" alt="${item.title}" class="gallery-image">
+                <div class="gallery-info">
+                    <h3>${item.title}</h3>
+                    <p>${item.description}</p>
+                    <div class="gallery-meta">
+                        <span class="gallery-year">${item.year}</span>
+                        ${item.url ? `<a href="${item.url}" target="_blank" class="gallery-link">View Project →</a>` : ''}
+                    </div>
+                </div>
+            `;
+            return div;
+        }
+
+        function loadAdminGallery() {
+            const adminGalleryGrid = document.getElementById('adminGalleryGrid');
+            const items = getGalleryItems();
+            
+            adminGalleryGrid.innerHTML = '';
+            
+            items.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'admin-gallery-item';
+                div.innerHTML = `
+                    <button class="delete-button" onclick="deleteGalleryItem(${index})">Delete</button>
+                    <img src="${item.image}" alt="${item.title}" class="gallery-image">
+                    <div class="gallery-info">
+                        <h3>${item.title}</h3>
+                        <p>${item.description}</p>
+                        <div class="gallery-meta">
+                            <span class="gallery-year">${item.year}</span>
+                        </div>
+                    </div>
+                `;
+                adminGalleryGrid.appendChild(div);
+            });
+        }
+
+        function deleteGalleryItem(index) {
+            if (confirm('Are you sure you want to delete this project?')) {
+                const items = getGalleryItems();
+                items.splice(index, 1);
+                saveGalleryItems(items);
+                loadAdminGallery();
+                loadGallery();
+                alert('Project deleted successfully!');
+            }
+        }
+
+        // ===== UPLOAD FORM =====
+        document.getElementById('imageInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
         });
 
-        // ===== INITIALIZE WATER EFFECTS =====
-        document.addEventListener('DOMContentLoaded', function() {
-            // Create water effects immediately
-            createWaterEffects();
+        document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
             
-            // Fade in animation
+            const formData = new FormData(this);
+            const imageFile = formData.get('image');
+            
+            // Read image as base64
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const newItem = {
+                    title: formData.get('title'),
+                    description: formData.get('description'),
+                    year: formData.get('year'),
+                    url: formData.get('url'),
+                    image: e.target.result
+                };
+                
+                // Save to localStorage
+                const items = getGalleryItems();
+                items.push(newItem);
+                saveGalleryItems(items);
+                
+                // Reload galleries
+                loadGallery();
+                loadAdminGallery();
+                
+                // Reset form
+                document.getElementById('uploadForm').reset();
+                document.getElementById('imagePreview').style.display = 'none';
+                
+                alert('Project uploaded successfully!');
+            };
+            reader.readAsDataURL(imageFile);
+        });
+
+        // ===== INITIALIZE =====
+        document.addEventListener('DOMContentLoaded', function() {
+            createWaterEffects();
+            loadGallery();
+            
+            // Check if admin is logged in
+            if (sessionStorage.getItem('admin_logged_in') === 'true') {
+                showAdminDashboard();
+            }
+            
             setTimeout(() => {
                 document.body.style.opacity = '1';
             }, 100);
         });
     </script>
 </body>
-
 </html>
