@@ -1,45 +1,9 @@
-<!DOCTYPE html><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KONINE | Fashion Portfolio</title>
-    
-    <!-- 
-    ═══════════════════════════════════════════════════════════════════════
-    🔐 GOOGLE OAUTH SETUP INSTRUCTIONS
-    ═══════════════════════════════════════════════════════════════════════
-    
-    HATUA 1: Pata Google Client ID
-    -------------------------------
-    1. Nenda: https://console.cloud.google.com/
-    2. Create project mpya: "KONINE Portfolio"
-    3. Enable "Google Identity Services API"
-    4. Create OAuth 2.0 Client ID:
-       - Type: Web application
-       - Authorized JavaScript origins:
-         * http://localhost:8000
-         * https://yourusername.github.io (kwa GitHub Pages)
-       - Authorized redirect URIs:
-         * http://localhost:8000/
-         * https://yourusername.github.io/your-repo/
-    5. COPY Client ID yako
-    
-    HATUA 2: Weka Client ID Hapa Chini
-    -----------------------------------
-    Tafuta line 64 na badilisha "YOUR_GOOGLE_CLIENT_ID_HERE" 
-    na Client ID yako halisi.
-    
-    HATUA 3: Badilisha Admin Email
-    -------------------------------
-    Tafuta line 827 na weka email yako ya Google ambayo 
-    utatumia kwa admin access.
-    
-    ═══════════════════════════════════════════════════════════════════════
-    -->
-    
-    <!-- Google Sign-In Library -->
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
     
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -752,10 +716,10 @@
             text-align: center;
         }
 
-        .google-signin {
-            display: flex;
-            justify-content: center;
-            margin: 30px 0;
+        /* Login Form Styles */
+        .login-form {
+            max-width: 400px;
+            margin: 0 auto;
         }
 
         /* Admin Dashboard */
@@ -1247,7 +1211,7 @@
         <div class="gallery-header">
             <h2>Portfolio Gallery</h2>
             <p>A curated collection of my creative journey — from concept to execution, each piece tells a story of innovation and craftsmanship.</p>
-            <button class="admin-button" onclick="openAdminModal()">🔐 Admin Access</button>
+            <button class="admin-button" id="mainAdminButton" onclick="openAdminModal()">🔐 Admin Access</button>
         </div>
         
         <div class="gallery-grid" id="galleryGrid">
@@ -1352,44 +1316,35 @@
         </div>
     </div>
 
+    <!-- MODAL YA ADMIN LOGIN (RAHISI) -->
     <div class="modal" id="adminModal">
         <div class="modal-content">
             <span class="modal-close" onclick="closeAdminModal()">×</span>
             <h3>Admin Access</h3>
             <p style="text-align: center; color: var(--text-gray); margin-bottom: 30px;">
-                Sign in with your authorized Google account
+                Enter your admin credentials
             </p>
             
-            <!-- 
-            ═══════════════════════════════════════════════════════════════════════
-            🔐 GOOGLE SIGN-IN BUTTON - WEKA CLIENT ID YAKO HAPA!
-            ═══════════════════════════════════════════════════════════════════════
-            
-            BADILISHA "YOUR_GOOGLE_CLIENT_ID_HERE" NA CLIENT ID YAKO HALISI
-            
-            Example:
-            data-client_id="123456789-abcdefghijk.apps.googleusercontent.com"
-            ═══════════════════════════════════════════════════════════════════════
-            -->
-            <div class="google-signin">
-                <div id="g_id_onload"
-                     data-client_id="YOUR_GOOGLE_CLIENT_ID_HERE"
-                     data-callback="handleCredentialResponse"
-                     data-auto_prompt="false">
+            <!-- FORM YA ADMIN LOGIN (RAHISI) -->
+            <div class="login-form">
+                <div class="form-group">
+                    <label>Admin Email</label>
+                    <input type="email" id="adminEmail" placeholder="mbwilosebastian@gmail.com" value="mbwilosebastian@gmail.com" readonly>
                 </div>
-                <div class="g_id_signin" 
-                     data-type="standard"
-                     data-size="large"
-                     data-theme="filled_black"
-                     data-text="signin_with"
-                     data-shape="rectangular"
-                     data-logo_alignment="left">
+                
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="adminPassword" placeholder="Enter password" required>
                 </div>
+                
+                <button class="submit-button" onclick="adminLogin()" style="width: 100%; margin-top: 20px;">
+                    Login to Admin Panel
+                </button>
+                
+                <p style="text-align: center; color: var(--text-gray); font-size: 0.85rem; margin-top: 20px;">
+                    ⚠️ Only authorized admin can access
+                </p>
             </div>
-            
-            <p style="text-align: center; color: var(--text-gray); font-size: 0.85rem; margin-top: 20px;">
-                ⚠️ Only authorized admin email can access
-            </p>
         </div>
     </div>
 
@@ -1401,13 +1356,14 @@
 
     <script>
         // ═══════════════════════════════════════════════════════════════════════
-        // 📧 ADMIN EMAIL - BADILISHA EMAIL YAKO HAPA!
+        // 🔐 ADMIN CREDENTIALS (RAHISI)
         // ═══════════════════════════════════════════════════════════════════════
-        // Hii ndio email ya Google ambayo itakubaliwa kuingia admin panel
-        const ADMIN_EMAIL = 'mbwilosebastian@gmail.com'; // <-- BADILISHA HAPA!
-        // ═══════════════════════════════════════════════════════════════════════
-
+        const ADMIN_CREDENTIALS = {
+            email: 'mbwilosebastian@gmail.com',
+            password: 'Sebastian2005' // <-- BADILISHA PASSWORD HAPA UKITAKA
+        };
         const GALLERY_STORAGE_KEY = 'konine_gallery_items';
+        // ═══════════════════════════════════════════════════════════════════════
 
         // ===== WATER EFFECTS =====
         function createWaterEffects() {
@@ -1460,6 +1416,11 @@
             document.querySelectorAll('.nav-links a').forEach(link => link.classList.remove('active'));
             document.getElementById(`link-${pageId}`).classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Update admin button if needed
+            if (pageId === 'gallery') {
+                updateAdminButton();
+            }
         }
 
         // ===== VISITOR COUNTER =====
@@ -1519,45 +1480,43 @@
         // ===== ADMIN MODAL =====
         function openAdminModal() {
             document.getElementById('adminModal').classList.add('active');
+            document.getElementById('adminPassword').focus();
         }
 
         function closeAdminModal() {
             document.getElementById('adminModal').classList.remove('active');
+            document.getElementById('adminPassword').value = '';
         }
 
-        // ═══════════════════════════════════════════════════════════════════════
-        // 🔐 GOOGLE SIGN-IN HANDLER
-        // ═══════════════════════════════════════════════════════════════════════
-        function handleCredentialResponse(response) {
-            try {
-                // Decode JWT token from Google
-                const payload = JSON.parse(atob(response.credential.split('.')[1]));
+        // ===== ADMIN LOGIN FUNCTION (RAHISI) =====
+        function adminLogin() {
+            const emailInput = document.getElementById('adminEmail').value;
+            const passwordInput = document.getElementById('adminPassword').value;
+            
+            // Check credentials
+            if (emailInput === ADMIN_CREDENTIALS.email && passwordInput === ADMIN_CREDENTIALS.password) {
+                // Store admin login in session
+                sessionStorage.setItem('admin_logged_in', 'true');
+                sessionStorage.setItem('admin_name', 'Sebastian Mbwilo');
+                sessionStorage.setItem('admin_email', ADMIN_CREDENTIALS.email);
+                sessionStorage.setItem('admin_photo', 'profile.jpg');
                 
-                console.log('User attempting login:', payload.email);
+                // Show admin dashboard
+                showAdminDashboard();
+                closeAdminModal();
                 
-                // Check if user is authorized admin
-                if (payload.email === ADMIN_EMAIL) {
-                    // Store user info in session
-                    sessionStorage.setItem('admin_logged_in', 'true');
-                    sessionStorage.setItem('admin_name', payload.name);
-                    sessionStorage.setItem('admin_email', payload.email);
-                    sessionStorage.setItem('admin_photo', payload.picture);
-                    
-                    // Show admin dashboard
-                    showAdminDashboard();
-                    closeAdminModal();
-                    
-                    alert(`✅ Welcome back, ${payload.name}! You are now logged in as admin.`);
-                } else {
-                    alert(`❌ Access Denied!\n\nYour email (${payload.email}) is not authorized.\n\nOnly ${ADMIN_EMAIL} can access the admin panel.`);
-                    console.log('Unauthorized access attempt from:', payload.email);
-                }
-            } catch (error) {
-                console.error('Error processing Google Sign-In:', error);
-                alert('Error signing in. Please try again.');
+                // Clear password field
+                document.getElementById('adminPassword').value = '';
+                
+                alert(`✅ Welcome back, Sebastian! You are now logged in as admin.`);
+            } else {
+                alert('❌ Access Denied!\n\nIncorrect email or password.');
+                document.getElementById('adminPassword').value = '';
+                document.getElementById('adminPassword').focus();
             }
         }
 
+        // ===== SHOW ADMIN DASHBOARD =====
         function showAdminDashboard() {
             const adminDashboard = document.getElementById('adminDashboard');
             adminDashboard.classList.add('active');
@@ -1565,17 +1524,38 @@
             // Update user info
             document.getElementById('userName').textContent = sessionStorage.getItem('admin_name');
             document.getElementById('userEmail').textContent = sessionStorage.getItem('admin_email');
-            document.getElementById('userPhoto').src = sessionStorage.getItem('admin_photo');
+            document.getElementById('userPhoto').src = sessionStorage.getItem('admin_photo') || 'profile.jpg';
             
             // Load admin gallery
             loadAdminGallery();
+            
+            // Update admin button
+            updateAdminButton();
         }
 
+        // ===== LOGOUT FUNCTION =====
         function logoutAdmin() {
             if (confirm('Are you sure you want to logout?')) {
                 sessionStorage.clear();
                 document.getElementById('adminDashboard').classList.remove('active');
+                document.getElementById('adminPassword').value = '';
+                updateAdminButton();
                 alert('You have been logged out successfully.');
+            }
+        }
+
+        // ===== UPDATE ADMIN BUTTON =====
+        function updateAdminButton() {
+            const adminButton = document.getElementById('mainAdminButton');
+            if (sessionStorage.getItem('admin_logged_in') === 'true') {
+                adminButton.textContent = '📊 Admin Dashboard';
+                adminButton.onclick = function() {
+                    showAdminDashboard();
+                    document.getElementById('adminDashboard').scrollIntoView({ behavior: 'smooth' });
+                };
+            } else {
+                adminButton.textContent = '🔐 Admin Access';
+                adminButton.onclick = openAdminModal;
             }
         }
 
@@ -1705,11 +1685,19 @@
                 showAdminDashboard();
             }
             
+            updateAdminButton();
+            
             setTimeout(() => {
                 document.body.style.opacity = '1';
             }, 100);
+            
+            // Add Enter key support for admin login
+            document.getElementById('adminPassword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    adminLogin();
+                }
+            });
         });
     </script>
 </body>
-    </html>
-
+</html>
