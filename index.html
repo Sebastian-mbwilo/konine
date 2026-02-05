@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KONINE | Fashion Portfolio</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --gold: #caa36a;
+            --light-gold: #e6d4b8;
+            --dark-bg: #0a0a0a;
+            --light-bg: #1a1a1a;
+            --text-light: #e6e6e6;
+            --text-gray: #888;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        /* ===== NAVIGATION ===== */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 8%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(202, 163, 106, 0.2);
+        }
+
+        /* Logo */
+        .logo-art {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+        }
+
+        .letter {
+            font-family: 'Playfair Display', serif;
+            font-size: 40px;
+            font-weight: 900;
+            position: relative;
+            line-height: 1;
+        }
+
+        .k { color: var(--text-light); transform: skewY(-6deg); }
+        .k::after {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 8px;
+            width: 3px;
+            height: 80%;
+            background: var(--gold);
+        }
+
+        .o { color: transparent; -webkit-text-stroke: 2px var(--gold); }
+        .o::after {
+            content: '';
+            position: absolute;
+            inset: 8px;
+            border: 1px solid rgba(202, 163, 106, 0.4);
+            border-radius: 50%;
+        }
+
+        .n1 {
+            background: linear-gradient(180deg, #ffffff, #9e9e9e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .i { color: var(--gold); }
+        .i::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 8px;
+            background: var(--gold);
+            border-radius: 50%;
+        }
+
+        .n2 {
+            color: #111;
+            background: #fff;
+            padding: 0 6px;
+        }
+
+        .e {
+            color: var(--gold);
+            letter-spacing: -3px;
+            text-shadow: 0 0 15px rgba(202, 163, 106, 0.6);
+        }
+
+        /* Navigation Links */
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-light);
+            font-weight: 500;
+            font-size: 14px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--gold);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--gold);
+        }
+
+        /* ===== PAGE SECTIONS ===== */
+        .page {
+            display: none;
+            padding: 140px 10% 80px;
+            min-height: 100vh;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== HOME PAGE WITH WATER EFFECT ===== */
+        .hero-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Water Effect Container */
+        .water-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            height: 500px;
+            margin: 0 auto;
+            filter: drop-shadow(0 0 30px rgba(202, 163, 106, 0.3));
+        }
+
+        /* Water wave base - completely fluid, no corners */
+        .water-wave {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                rgba(202, 163, 106, 0.15) 0%,
+                rgba(26, 26, 26, 0.9) 50%,
+                rgba(202, 163, 106, 0.15) 100%);
+            border-radius: 40% 60% 60% 40% / 60% 30% 70% 40%;
+            animation: waterMorph 25s infinite ease-in-out;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        /* Water surface ripples */
+        .water-ripples {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: 
+                radial-gradient(circle at 30% 30%, rgba(202, 163, 106, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 70%, rgba(202, 163, 106, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(202, 163, 106, 0.05) 0%, transparent 50%);
+            animation: ripples 20s infinite linear;
+            z-index: 2;
+        }
+
+        /* The actual profile image with water distortion */
+        .water-image {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            width: calc(100% - 30px);
+            height: calc(100% - 30px);
+            background-image: url('profile.jpg');
+            background-size: cover;
+            background-position: center;
+            object-fit: cover;
+            border-radius: 40% 60% 60% 40% / 60% 30% 70% 40%;
+            animation: imageDistort 25s infinite ease-in-out;
+            filter: 
+                grayscale(0.1) 
+                contrast(1.1) 
+                brightness(1.05);
+            transition: filter 0.5s ease;
+            z-index: 3;
+        }
+
+        /* Water droplets effect */
+        .water-droplets {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 4;
+            pointer-events: none;
+        }
+
+        .droplet {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle at 30% 30%, var(--gold), transparent);
+            border-radius: 50%;
+            animation: dropletFall 8s infinite linear;
+            opacity: 0;
+            filter: blur(1px);
+        }
+
+        /* Shimmering light reflection */
+        .water-shimmer {
+            position: absolute;
+            width: 150%;
+            height: 100px;
+            top: -50px;
+            left: -25%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.1),
+                rgba(202, 163, 106, 0.2),
+                rgba(255, 255, 255, 0.1),
+                transparent
+            );
+            transform: rotate(-15deg);
+            animation: shimmer 12s infinite linear;
+            z-index: 3;
+            mix-blend-mode: overlay;
+        }
+
+        /* Floating bubbles */
+        .water-bubbles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+        }
+
+        .bubble {
+            position: absolute;
+            background: radial-gradient(circle at 30% 30%, rgba(202, 163, 106, 0.3), transparent);
+            border-radius: 50%;
+            animation: bubbleFloat 15s infinite ease-in-out;
+            opacity: 0.4;
+        }
+
+        /* ANIMATIONS FOR WATER EFFECT */
+        @keyframes waterMorph {
+            0%, 100% {
+                border-radius: 40% 60% 60% 40% / 60% 30% 70% 40%;
+                transform: scale(1) rotate(0deg);
+            }
+            20% {
+                border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+                transform: scale(1.02) rotate(5deg);
+            }
+            40% {
+                border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+                transform: scale(1) rotate(-3deg);
+            }
+            60% {
+                border-radius: 50% 50% 30% 70% / 40% 70% 50% 60%;
+                transform: scale(1.01) rotate(2deg);
+            }
+            80% {
+                border-radius: 40% 60% 50% 50% / 60% 50% 50% 40%;
+                transform: scale(0.99) rotate(-1deg);
+            }
+        }
+
+        @keyframes imageDistort {
+            0%, 100% {
+                border-radius: 40% 60% 60% 40% / 60% 30% 70% 40%;
+            }
+            20% {
+                border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            }
+            40% {
+                border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+            }
+            60% {
+                border-radius: 50% 50% 30% 70% / 40% 70% 50% 60%;
+            }
+            80% {
+                border-radius: 40% 60% 50% 50% / 60% 50% 50% 40%;
+            }
+        }
+
+        @keyframes ripples {
+            0% {
+                transform: rotate(0deg) scale(1);
+            }
+            50% {
+                transform: rotate(180deg) scale(1.1);
+            }
+            100% {
+                transform: rotate(360deg) scale(1);
+            }
+        }
+
+        @keyframes dropletFall {
+            0% {
+                transform: translateY(-100px) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(500px) scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: rotate(-15deg) translateX(-100%);
+            }
+            100% {
+                transform: rotate(-15deg) translateX(100%);
+            }
+        }
+
+        @keyframes bubbleFloat {
+            0%, 100% {
+                transform: translateY(0) translateX(0) scale(0.8);
+                opacity: 0.2;
+            }
+            50% {
+                transform: translateY(-100px) translateX(50px) scale(1.2);
+                opacity: 0.6;
+            }
+        }
+
+        /* Hover effects - more dramatic water movement */
+        .water-container:hover .water-wave {
+            animation-duration: 15s;
+        }
+
+        .water-container:hover .water-image {
+            animation-duration: 15s;
+            filter: grayscale(0) contrast(1.2) brightness(1.1);
+        }
+
+        .water-container:hover .water-ripples {
+            animation-duration: 10s;
+        }
+
+        .hero-text h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            font-size: 18px;
+            letter-spacing: 4px;
+            color: var(--text-gray);
+            margin-bottom: 15px;
+        }
+
+        .hero-text h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 25px;
+            background: linear-gradient(to right, var(--text-light), var(--light-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        #type-text {
+            font-size: 1.8rem;
+            color: var(--gold);
+            font-weight: 600;
+            margin: 20px 0;
+            min-height: 60px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .hero-text p {
+            font-size: 1.1rem;
+            color: #cccccc;
+            margin-bottom: 30px;
+            max-width: 500px;
+        }
+
+        /* Founder Badge */
+        .founder-badge {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(202, 163, 106, 0.1);
+            border: 1px solid var(--gold);
+            border-radius: 2px;
+            margin: 15px 0;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            color: var(--light-gold);
+        }
+
+        .founder-badge i {
+            color: var(--gold);
+            font-style: normal;
+            font-weight: 600;
+        }
+
+        /* Visitor Counter */
+        .visitor-counter {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 25px;
+            background: rgba(202, 163, 106, 0.1);
+            border-left: 3px solid var(--gold);
+            margin-top: 30px;
+        }
+
+        .visitor-counter span {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        /* ===== SKILLS PAGE ===== */
+        .skills-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .skills-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .skills-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: var(--gold);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .skill-card {
+            background: var(--light-bg);
+            padding: 40px 30px;
+            text-align: center;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(202, 163, 106, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gold);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .skill-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .skill-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--gold);
+        }
+
+        .skill-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--gold);
+            margin: 20px 0 15px;
+        }
+
+        .skill-card p {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Icon styling */
+        .skill-icon {
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+
+        /* ===== CONTACT PAGE ===== */
+        .contact-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .contact-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .contact-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+        }
+
+        .contact-info {
+            padding: 40px;
+            background: var(--light-bg);
+            border-radius: 2px;
+            border-left: 4px solid var(--gold);
+        }
+
+        .contact-info h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 25px;
+            color: var(--text-light);
+        }
+
+        .contact-info p {
+            margin-bottom: 20px;
+            color: var(--text-gray);
+            font-size: 1.1rem;
+        }
+
+        .contact-info a {
+            color: var(--gold);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .contact-info a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--gold);
+            transition: width 0.3s ease;
+        }
+
+        .contact-info a:hover::after {
+            width: 100%;
+        }
+
+        .quote {
+            font-style: italic;
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(202, 163, 106, 0.05);
+            border-left: 3px solid var(--gold);
+            color: var(--light-gold);
+        }
+
+        /* Contact Form */
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            background: var(--light-bg);
+            border: 1px solid rgba(202, 163, 106, 0.2);
+            color: var(--text-light);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 2px rgba(202, 163, 106, 0.1);
+        }
+
+        .contact-form button {
+            background: var(--gold);
+            color: #000;
+            border: none;
+            padding: 15px 40px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            width: 100%;
+        }
+
+        .contact-form button:hover {
+            background: #e0b87a;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(202, 163, 106, 0.3);
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(202, 163, 106, 0.1);
+            margin-top: 60px;
+        }
+
+        footer p {
+            margin-bottom: 10px;
+        }
+
+        #copyright-text {
+            color: var(--gold);
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 992px) {
+            .hero-container,
+            .contact-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .water-container {
+                max-width: 380px;
+                height: 480px;
+                margin: 0 auto;
+            }
+            
+            .hero-text h1 {
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 20px;
+                padding: 20px;
+            }
+            
+            .nav-links {
+                gap: 20px;
+            }
+            
+            .page {
+                padding: 120px 20px 60px;
+            }
+            
+            .letter {
+                font-size: 30px;
+            }
+            
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+            
+            .water-container {
+                max-width: 340px;
+                height: 440px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-links {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .water-container {
+                max-width: 300px;
+                height: 400px;
+            }
+            
+            .water-image {
+                background-size: cover;
+                background-position: center center;
+                object-fit: cover;
+            }
+            
+            .founder-badge {
+                font-size: 0.8rem;
+                padding: 8px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo-art">
+            <div class="letter k">K</div>
+            <div class="letter o">O</div>
+            <div class="letter n1">N</div>
+            <div class="letter i">I</div>
+            <div class="letter n2">N</div>
+            <div class="letter e">E</div>
+        </div>
+        
+        <ul class="nav-links">
+            <li><a onclick="showPage('home')" id="link-home" class="active">Home</a></li>
+            <li><a onclick="showPage('skills')" id="link-skills">Craft</a></li>
+            <li><a onclick="showPage('contact')" id="link-contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="home" class="page active">
+        <div class="hero-container">
+            <div class="hero-img">
+                <div class="water-container" id="waterContainer">
+                    <!-- Water wave base -->
+                    <div class="water-wave"></div>
+                    
+                    <!-- Water ripples -->
+                    <div class="water-ripples"></div>
+                    
+                    <!-- Water bubbles -->
+                    <div class="water-bubbles" id="waterBubbles"></div>
+                    
+                    <!-- Water droplets -->
+                    <div class="water-droplets" id="waterDroplets"></div>
+                    
+                    <!-- The profile image -->
+                    <div class="water-image"></div>
+                    
+                    <!-- Shimmering light -->
+                    <div class="water-shimmer"></div>
+                </div>
+            </div>
+            <div class="hero-text">
+                <h3>FASHION • IDENTITY • STATEMENT</h3>
+                <h1>Sebastian Mbwilo</h1>
+                <p id="type-text">Visionary Founder</p>
+                
+                <div class="founder-badge">
+                    <i>✧ FOUNDER & ORIGINATOR ✧</i><br>
+                    Birthed KONINE in 2023 • A dream woven into reality
+                </div>
+                
+                <p>East African visionary who conceptualized and founded KONINE in 2023 while still navigating academia. A testament to youthful innovation meeting timeless craftsmanship.</p>
+                
+                
+                
+                <div class="visitor-counter">
+                    <span>👤</span>
+                    <div>
+                        <div style="font-size: 0.9rem; color: var(--text-gray);">Witnesses to the Vision</div>
+                        <span id="visitor-count">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skills Page -->
+    <div id="skills" class="page">
+        <div class="skills-header">
+            <h2>Artisan Craft</h2>
+            <p style="color: var(--text-gray); max-width: 600px; margin: 0 auto;">Precision and creativity in every digital stitch</p>
+        </div>
+        
+        <div class="skills-grid">
+            <div class="skill-card">
+                <div class="skill-icon">💻</div>
+                <h3>Code Couture</h3>
+                <p>Architecting digital experiences with clean, elegant code. Front-end mastery meets back-end precision.</p>
+            </div>
+            
+            <div class="skill-card">
+                <div class="skill-icon">🎨</div>
+                <h3>Visual Design</h3>
+                <p>Crafting brand identities that resonate. From logos to full visual systems, every pixel tells a story.</p>
+            </div>
+            
+            <div class="skill-card">
+                <div class="skill-icon">🤖</div>
+                <h3>3D Architecture</h3>
+                <p>Modeling the future with precision. Robotic concepts and three-dimensional visualizations.</p>
+            </div>
+            
+            <div class="skill-card">
+                <div class="skill-icon">🎬</div>
+                <h3>Media Production</h3>
+                <p>Cinematic storytelling through video and photography. From concept to final cut.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Page -->
+    <div id="contact" class="page">
+        <div class="contact-header">
+            <h2>Connect With Me</h2>
+            <p style="color: var(--text-gray);">Let's create something extraordinary together</p>
+        </div>
+        
+        <div class="contact-content">
+            <div class="contact-info">
+                <h3>Sebastian Mbwilo</h3>
+                <p>📍 <strong>Location:</strong> East Africa</p>
+                <p>📧 <strong>Email:</strong> <a href="mailto:mbwilosebastian@gmail.com">mbwilosebastian@gmail.com</a></p>
+                <p>📞 <strong>Phone:</strong> <a href="tel:+255617880633">+255 617 880 633</a></p>
+                <p>📱 <strong>Alt Phone:</strong> <a href="tel:+255628240630">+255 628 240 630</a></p>
+                
+                <div class="quote">
+                    "In 2023, as a young scholar, I dreamed KONINE into existence—proof that vision knows no age, only courage."
+                </div>
+            </div>
+            
+            <div class="contact-form">
+                <form id="contactForm">
+                    <input type="text" name="name" placeholder="Full Name" required>
+                    <input type="email" name="email" placeholder="Email Address" required>
+                    <textarea name="message" rows="5" placeholder="Your Vision..." required></textarea>
+                    <button type="submit">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p id="copyright-text"></p>
+        <p>KONINE GLOBAL | Founded 2023 by Sebastian Mbwilo</p>
+        <p style="margin-top: 20px; font-size: 0.8rem; color: var(--text-gray);">Fashion • Identity • Statement • Vision • Legacy</p>
+    </footer>
+
+    <script>
+        // ===== CREATE WATER EFFECTS =====
+        function createWaterEffects() {
+            const dropletsContainer = document.getElementById('waterDroplets');
+            const bubblesContainer = document.getElementById('waterBubbles');
+            
+            if (!dropletsContainer || !bubblesContainer) return;
+            
+            // Create droplets
+            for (let i = 0; i < 15; i++) {
+                const droplet = document.createElement('div');
+                droplet.className = 'droplet';
+                
+                // Random position
+                const x = Math.random() * 100;
+                droplet.style.left = `${x}%`;
+                
+                // Random delay
+                droplet.style.animationDelay = `${Math.random() * 10}s`;
+                
+                // Random size
+                const size = Math.random() * 4 + 4;
+                droplet.style.width = `${size}px`;
+                droplet.style.height = `${size}px`;
+                
+                dropletsContainer.appendChild(droplet);
+            }
+            
+            // Create bubbles
+            for (let i = 0; i < 10; i++) {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                
+                // Random position
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                bubble.style.left = `${x}%`;
+                bubble.style.top = `${y}%`;
+                
+                // Random size
+                const size = Math.random() * 30 + 10;
+                bubble.style.width = `${size}px`;
+                bubble.style.height = `${size}px`;
+                
+                // Random animation
+                bubble.style.animationDelay = `${Math.random() * 15}s`;
+                bubble.style.animationDuration = `${Math.random() * 10 + 10}s`;
+                
+                bubblesContainer.appendChild(bubble);
+            }
+        }
+
+        // ===== RANDOMIZE WATER MOVEMENT ON INTERACTION =====
+        document.getElementById('waterContainer').addEventListener('mouseenter', function() {
+            const waterWave = this.querySelector('.water-wave');
+            const waterImage = this.querySelector('.water-image');
+            
+            // Randomize water movement speed
+            const randomDuration1 = Math.random() * 10 + 15; // 15-25 seconds
+            const randomDuration2 = Math.random() * 10 + 15; // 15-25 seconds
+            
+            waterWave.style.animationDuration = `${randomDuration1}s`;
+            waterImage.style.animationDuration = `${randomDuration2}s`;
+        });
+
+        // ===== PAGE NAVIGATION =====
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Update active link
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.getElementById(`link-${pageId}`).classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ===== VISITOR COUNTER =====
+        let visitorCount = localStorage.getItem('konine_visitors');
+        if (!visitorCount) {
+            visitorCount = 0;
+        }
+        visitorCount++;
+        localStorage.setItem('konine_visitors', visitorCount);
+        document.getElementById('visitor-count').textContent = visitorCount;
+
+        // ===== COPYRIGHT =====
+        const now = new Date();
+        const monthNames = ["January", "February", "March", "April", "May", "June", 
+                          "July", "August", "September", "October", "November", "December"];
+        const currentMonth = monthNames[now.getMonth()];
+        const currentYear = now.getFullYear();
+        
+        document.getElementById('copyright-text').textContent = 
+            `© ${currentMonth} ${currentYear} KONINE — Vision Born 2023`;
+
+        // ===== TYPEWRITER EFFECT =====
+        const typeText = document.getElementById('type-text');
+        const professions = ["Visionary Founder", "Creative Originator", "Digital Artisan", "KONINE Architect"];
+        let professionIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let typingSpeed = 100;
+
+        function typeWriter() {
+            const currentProfession = professions[professionIndex];
+            
+            if (isDeleting) {
+                typeText.textContent = currentProfession.substring(0, charIndex - 1);
+                charIndex--;
+                typingSpeed = 50;
+            } else {
+                typeText.textContent = currentProfession.substring(0, charIndex + 1);
+                charIndex++;
+                typingSpeed = 100;
+            }
+
+            if (!isDeleting && charIndex === currentProfession.length) {
+                isDeleting = true;
+                typingSpeed = 1500; // Pause at end
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                professionIndex = (professionIndex + 1) % professions.length;
+                typingSpeed = 500; // Pause before next word
+            }
+
+            setTimeout(typeWriter, typingSpeed);
+        }
+
+        // Start typewriter effect
+        setTimeout(typeWriter, 1000);
+
+        // ===== FORM SUBMISSION =====
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            const name = formData.get('name');
+            
+            // Simple form submission feedback
+            alert(`Thank you ${name}! Your message has been received. I'll respond shortly.`);
+            
+            // Reset form
+            this.reset();
+        });
+
+        // ===== SMOOTH SCROLL FOR NAV LINKS =====
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('onclick').match(/'([^']+)'/)[1];
+                showPage(targetId);
+            });
+        });
+
+        // ===== INITIALIZE WATER EFFECTS =====
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create water effects immediately
+            createWaterEffects();
+            
+            // Fade in animation
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body>
+</html>
